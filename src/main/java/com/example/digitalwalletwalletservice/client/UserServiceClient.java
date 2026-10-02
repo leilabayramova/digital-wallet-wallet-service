@@ -1,5 +1,7 @@
 package com.example.digitalwalletwalletservice.client;
 
+import com.example.digitalwalletwalletservice.dto.UserResponseDto;
+import com.example.digitalwalletwalletservice.exception.UserNotActiveException;
 import com.example.digitalwalletwalletservice.exception.UserNotFoundException;
 import com.example.digitalwalletwalletservice.exception.UserServiceUnavailableException;
 import feign.FeignException;
@@ -24,11 +26,17 @@ public class UserServiceClient {
 
         circuitBreaker.run(
                 () -> {
+                    UserResponseDto user;
                     try {
-                        userClient.getUserById(userId);
+                        user = userClient.getUserById(userId);
                     } catch (FeignException.NotFound ex) {
                         throw new UserNotFoundException(userId);
                     }
+
+                    if (!user.isActive()) {
+                        throw new UserNotActiveException(userId);
+                    }
+
                     return null;
                 },
                 throwable -> handleFailure(userId, throwable)
@@ -36,8 +44,8 @@ public class UserServiceClient {
     }
 
     private Void handleFailure(Long userId, Throwable throwable) {
-        if (throwable instanceof UserNotFoundException userNotFoundException) {
-            throw userNotFoundException;
+        if (throwable instanceof UserNotFoundException || throwable instanceof UserNotActiveException) {
+            throw (RuntimeException) throwable;
         }
 
         log.error("User service call failed for userId={}", userId, throwable);

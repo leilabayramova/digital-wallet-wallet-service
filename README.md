@@ -40,7 +40,7 @@ User Service repository: [digital-wallet-user-service](https://github.com/leilab
 
 ## Business Logic
 
-Wallet creation requires a valid user. Before creating a wallet, Wallet Service calls User Service through OpenFeign and checks whether the user exists. This call is wrapped in a Resilience4j circuit breaker with a connect/read timeout — if User Service is slow or down, the request fails fast with `503` instead of hanging.
+Wallet creation requires a valid, active user. Before creating a wallet, Wallet Service calls User Service through OpenFeign and checks whether the user exists **and** is active — wallets cannot be created for a deactivated user. This call is wrapped in a Resilience4j circuit breaker with a connect/read timeout — if User Service is slow or down, the request fails fast with `503` instead of hanging.
 
 Each wallet is created with:
 
@@ -286,7 +286,7 @@ Example:
 
 Handled cases include:
 
-- Wallet not found / user not found
+- Wallet not found / user not found / user not active (deactivated)
 - Invalid wallet status transition
 - Validation errors (with a field-level `validationErrors` map)
 - Duplicate transfer request / reused idempotency key with a different payload

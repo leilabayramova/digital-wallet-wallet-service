@@ -30,6 +30,12 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), null);
     }
 
+    @ExceptionHandler(UserNotActiveException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserNotActive(UserNotActiveException ex) {
+        log.warn("User not active: {}", ex.getMessage());
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage(), null);
+    }
+
     @ExceptionHandler(InvalidWalletStatusException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidWalletStatus(InvalidWalletStatusException ex) {
         log.warn("Invalid wallet status transition: {}", ex.getMessage());

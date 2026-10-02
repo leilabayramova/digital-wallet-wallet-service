@@ -1,5 +1,7 @@
 package com.example.digitalwalletwalletservice.client;
 
+import com.example.digitalwalletwalletservice.dto.UserResponseDto;
+import com.example.digitalwalletwalletservice.exception.UserNotActiveException;
 import com.example.digitalwalletwalletservice.exception.UserNotFoundException;
 import com.example.digitalwalletwalletservice.exception.UserServiceUnavailableException;
 import feign.FeignException;
@@ -16,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceClientTest {
@@ -32,8 +35,26 @@ class UserServiceClientTest {
     }
 
     @Test
-    void verifyUserExists_shouldNotThrow_whenUserExists() {
+    void verifyUserExists_shouldNotThrow_whenUserExistsAndIsActive() {
+        UserResponseDto activeUser = new UserResponseDto();
+        activeUser.setId(1L);
+        activeUser.setActive(true);
+
+        when(userClient.getUserById(1L)).thenReturn(activeUser);
+
         assertThatCode(() -> userServiceClient.verifyUserExists(1L)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void verifyUserExists_shouldThrowUserNotActiveException_whenUserIsInactive() {
+        UserResponseDto inactiveUser = new UserResponseDto();
+        inactiveUser.setId(2L);
+        inactiveUser.setActive(false);
+
+        when(userClient.getUserById(2L)).thenReturn(inactiveUser);
+
+        assertThatThrownBy(() -> userServiceClient.verifyUserExists(2L))
+                .isInstanceOf(UserNotActiveException.class);
     }
 
     @Test
