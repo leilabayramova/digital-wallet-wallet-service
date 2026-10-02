@@ -5,10 +5,12 @@ spring:
   application:
     name: digital-wallet-wallet-service
 
+  profiles:
+    active: local
+
   datasource:
     url: jdbc:postgresql://localhost:5432/digital_wallet_wallet_db
     username: postgres
-    password: s?nin_passwordun
 
   jpa:
     hibernate:
@@ -20,4 +22,11 @@ spring:
 
 clients:
   user-service:
-    url: http://localhost:9091
+        url: http://localhost:9091
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 3000

@@ -26,7 +26,7 @@ public class WalletEntity {
     @Column(name = "wallet_number", nullable = false, unique = true, length = 30)
     private String walletNumber;
 
-    @Column(nullable = false, precision = 19, scale = 2)
+    @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal balance;
 
     @Column(nullable = false, length = 3)

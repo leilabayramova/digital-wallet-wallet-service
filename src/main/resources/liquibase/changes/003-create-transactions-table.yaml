@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-transactions-table
+      author: leyla
+
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_transactions
+                    nullable: false
+
+              - column:
+                  name: wallet_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: transfer_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: type
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: amount
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: balance_before
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: balance_after
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transactions_wallet_id
+            columns:
+              - column:
+                  name: wallet_id
+
+      rollback:
+        - dropTable:
+            tableName: transactions

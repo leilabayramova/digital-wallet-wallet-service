@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-add-transfer-request-hash
+      author: leyla
+
+      changes:
+        - addColumn:
+            tableName: transfers
+            columns:
+              - column:
+                  name: request_hash
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: true
+
+      rollback:
+        - dropColumn:
+            tableName: transfers
+            columnName: request_hash

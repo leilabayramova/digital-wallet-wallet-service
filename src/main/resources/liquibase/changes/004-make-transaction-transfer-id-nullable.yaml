@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-make-transaction-transfer-id-nullable
+      author: leyla
+
+      changes:
+        - dropNotNullConstraint:
+            tableName: transactions
+            columnName: transfer_id
+            columnDataType: BIGINT
+
+      rollback:
+        - addNotNullConstraint:
+            tableName: transactions
+            columnName: transfer_id
+            columnDataType: BIGINT

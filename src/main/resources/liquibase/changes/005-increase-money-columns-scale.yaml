@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-increase-money-columns-scale
+      author: leyla
+
+      changes:
+        - modifyDataType:
+            tableName: wallets
+            columnName: balance
+            newDataType: DECIMAL(19,4)
+
+        - modifyDataType:
+            tableName: transfers
+            columnName: amount
+            newDataType: DECIMAL(19,4)
+
+        - modifyDataType:
+            tableName: transactions
+            columnName: amount
+            newDataType: DECIMAL(19,4)
+
+        - modifyDataType:
+            tableName: transactions
+            columnName: balance_before
+            newDataType: DECIMAL(19,4)
+
+        - modifyDataType:
+            tableName: transactions
+            columnName: balance_after
+            newDataType: DECIMAL(19,4)
+
+      rollback:
+        - modifyDataType:
+            tableName: wallets
+            columnName: balance
+            newDataType: DECIMAL(19,2)
+
+        - modifyDataType:
+            tableName: transfers
+            columnName: amount
+            newDataType: DECIMAL(19,2)
+
+        - modifyDataType:
+            tableName: transactions
+            columnName: amount
+            newDataType: DECIMAL(19,2)
+
+        - modifyDataType:
+            tableName: transactions
+            columnName: balance_before
+            newDataType: DECIMAL(19,2)
+
+        - modifyDataType:
+            tableName: transactions
+            columnName: balance_after
+            newDataType: DECIMAL(19,2)

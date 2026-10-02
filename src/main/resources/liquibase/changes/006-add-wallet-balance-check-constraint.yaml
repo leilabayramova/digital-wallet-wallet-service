@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-add-wallet-balance-check-constraint
+      author: leyla
+
+      changes:
+        - sql:
+            sql: ALTER TABLE wallets ADD CONSTRAINT chk_wallets_balance_non_negative CHECK (balance >= 0)
+
+      rollback:
+        - sql:
+            sql: ALTER TABLE wallets DROP CONSTRAINT chk_wallets_balance_non_negative

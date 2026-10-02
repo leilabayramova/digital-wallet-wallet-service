@@ -1,3 +1,15 @@
 databaseChangeLog:
   - include:
       file: liquibase/changes/001-create-wallets-table.yaml
+  - include:
+      file: liquibase/changes/002-create-transfers-table.yaml
+  - include:
+      file: liquibase/changes/003-create-transactions-table.yaml
+  - include:
+      file: liquibase/changes/004-make-transaction-transfer-id-nullable.yaml
+  - include:
+      file: liquibase/changes/005-increase-money-columns-scale.yaml
+  - include:
+      file: liquibase/changes/006-add-wallet-balance-check-constraint.yaml
+  - include:
+      file: liquibase/changes/007-add-transfer-request-hash.yaml
